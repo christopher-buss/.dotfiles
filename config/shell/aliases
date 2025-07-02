@@ -1,0 +1,102 @@
+# Common aliases for shell environments
+
+# Navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias -- -='cd -'
+
+# ls aliases
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# grep aliases
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Safety aliases
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Git aliases
+alias g='git'
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git pull'
+alias gd='git diff'
+alias gb='git branch'
+alias gco='git checkout'
+alias glog='git log --oneline --graph --decorate'
+
+# Directory listings
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lt='ls -altr'    # Sort by date, newest last
+alias lh='ls -alh'     # Human readable sizes
+
+# System monitoring
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias ps='ps aux'
+alias top='htop'       # Use htop if available
+alias ports='netstat -tulanp'
+
+# Network
+alias ping='ping -c 5'
+alias myip='curl http://ipecho.net/plain; echo'
+alias localip='hostname -I | cut -d" " -f1'
+
+# Development
+alias serve='python3 -m http.server 8000'
+alias weather='curl wttr.in'
+alias reload='source ~/.zshrc 2>/dev/null || source ~/.bashrc'
+
+# Dotfiles management
+alias dotfiles='cd ~/.dotfiles'
+alias dotupdate='~/.dotfiles/scripts/update.sh'
+alias dotcheck='find ~/.dotfiles -name "*.sh" -exec shellcheck {} \;'
+
+# Claude CLI shortcuts - basic commands for all shells
+alias claude="/home/isentinel/.claude/local/claude"
+alias cl="claude"
+alias clp="claude -p"
+alias clc="claude -c"
+alias cls="claude /status"
+
+# Docker aliases (if using Docker)
+alias d='docker'
+alias dc='docker-compose'
+alias dps='docker ps'
+alias dimg='docker images'
+
+# Kubernetes aliases (if using Kubernetes)
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgs='kubectl get services'
+alias kgn='kubectl get nodes'
+
+# Make and compile
+alias make='make -j$(nproc)'
+
+# Clear screen
+alias c='clear'
+alias cls='clear'
+
+# Quick edits
+alias zshconfig='${EDITOR:-vim} ~/.zshrc'
+alias bashconfig='${EDITOR:-vim} ~/.bashrc'
+alias vimconfig='${EDITOR:-vim} ~/.vimrc'
+
+# Load local aliases if they exist
+if [ -f ~/.aliases.local ]; then
+    source ~/.aliases.local
+fi

@@ -1,0 +1,162 @@
+name: Validate Dotfiles
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Check script permissions
+      run: |
+        echo "Checking script permissions..."
+        if [ ! -x "install.sh" ]; then
+          echo "❌ install.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "scripts/bootstrap.sh" ]; then
+          echo "❌ scripts/bootstrap.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "scripts/update.sh" ]; then
+          echo "❌ scripts/update.sh is not executable"
+          exit 1
+        fi
+        
+        echo "✅ All scripts have correct permissions"
+    
+    - name: Validate shell scripts
+      run: |
+        echo "Validating shell scripts..."
+        
+        # Check if shellcheck is available
+        if ! command -v shellcheck &> /dev/null; then
+          echo "Installing shellcheck..."
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+        fi
+        
+        # Run shellcheck on all shell scripts
+        find . -name "*.sh" -type f -exec shellcheck {} \;
+        echo "✅ Shell scripts validated"
+    
+    - name: Test installation (dry run)
+      run: |
+        echo "Testing installation process..."
+        
+        # Create a test home directory
+        TEST_HOME="/tmp/test-home"
+        mkdir -p "$TEST_HOME"
+        
+        # Mock the home directory
+        export HOME="$TEST_HOME"
+        
+        # Create a modified install script for testing
+        cp install.sh test-install.sh
+        
+        # Make the test script run in dry-run mode
+        sed -i 's/ln -sf/echo "Would link"/g' test-install.sh
+        sed -i 's/mkdir -p/echo "Would create directory"/g' test-install.sh
+        sed -i 's/mv /echo "Would move "/g' test-install.sh
+        
+        # Run the test installation
+        chmod +x test-install.sh
+        ./test-install.sh
+        
+        echo "✅ Installation script validated"
+    
+    - name: Check directory structure
+      run: |
+        echo "Validating directory structure..."
+        
+        # Check required directories exist
+        required_dirs=("config" "scripts" "themes" "docs")
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Required directory '$dir' is missing"
+            exit 1
+          fi
+        done
+        
+        # Check config subdirectories
+        config_dirs=("config/shell" "config/git" "config/vim" "config/tmux" "config/ssh")
+        
+        for dir in "${config_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Required config directory '$dir' is missing"
+            exit 1
+          fi
+        done
+        
+        echo "✅ Directory structure validated"
+    
+    - name: Validate configuration files
+      run: |
+        echo "Validating configuration files..."
+        
+        # Check if essential config files exist
+        if [ -f "config/git/gitconfig" ]; then
+          echo "✅ Git configuration found"
+        else
+          echo "⚠️  Git configuration not found (optional)"
+        fi
+        
+        if [ -f "config/shell/aliases" ]; then
+          echo "✅ Shell aliases found"
+        else
+          echo "⚠️  Shell aliases not found (optional)"
+        fi
+        
+        # Validate git config syntax if it exists
+        if [ -f "config/git/gitconfig" ]; then
+          git config --file=config/git/gitconfig --list > /dev/null
+          echo "✅ Git configuration syntax is valid"
+        fi
+        
+        echo "✅ Configuration files validated"
+    
+    - name: Test scripts functionality
+      run: |
+        echo "Testing script functionality..."
+        
+        # Test bootstrap script help
+        ./scripts/bootstrap.sh 2>&1 | grep -q "Usage:" || {
+          echo "❌ Bootstrap script doesn't show usage when run without arguments"
+          exit 1
+        }
+        
+        echo "✅ Scripts functionality validated"
+
+  test-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-20.04]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Test on ${{ matrix.os }}
+      run: |
+        echo "Testing dotfiles on ${{ matrix.os }}"
+        
+        # Test basic functionality
+        chmod +x install.sh scripts/*.sh
+        
+        # Verify scripts can be sourced without errors
+        bash -n install.sh
+        bash -n scripts/bootstrap.sh
+        bash -n scripts/update.sh
+        
+        echo "✅ Basic tests passed on ${{ matrix.os }}"

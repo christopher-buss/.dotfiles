@@ -1,0 +1,39 @@
+# Global Python packages
+# Install with: pip install -r pip-global.txt
+
+# Development Tools
+ipython                # Enhanced interactive Python
+jupyter               # Jupyter notebooks
+black                 # Code formatter
+flake8                # Linter
+mypy                  # Type checker
+isort                 # Import sorter
+
+# HTTP & API Tools
+requests              # HTTP library
+httpie                # Command line HTTP client
+
+# Data & Analysis
+pandas                # Data manipulation
+numpy                 # Numerical computing
+matplotlib            # Plotting library
+
+# Utilities
+pyyaml                # YAML parser
+python-dotenv         # Environment variable management
+click                 # CLI creation toolkit
+
+# Web Development
+flask                 # Micro web framework
+fastapi               # Modern web framework
+gunicorn              # WSGI server
+
+# Testing
+pytest                # Testing framework
+coverage              # Code coverage
+
+# Optional (uncomment if needed)
+# django               # Web framework
+# scrapy               # Web scraping
+# tensorflow           # Machine learning
+# torch                # PyTorch machine learning

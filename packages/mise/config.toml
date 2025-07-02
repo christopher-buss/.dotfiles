@@ -1,0 +1,45 @@
+# mise global configuration
+# See: https://mise.jdx.dev/configuration.html
+
+[settings]
+# Automatically install tools when entering a directory with .tool-versions
+auto_install = true
+
+# Show verbose output
+verbose = false
+
+# Check for new versions of mise itself
+update_check = true
+
+# Use legacy version files (.nvmrc, .python-version, etc.)
+legacy_version_file = true
+
+# Disable analytics
+disable_analytics = true
+
+# Plugin configuration
+[plugins]
+# Auto-update plugins on mise install
+auto_update = true
+
+# Node.js plugin settings
+[plugins.node]
+# Automatically install global packages after installing a new Node version
+auto_install_packages = true
+# Use the global package list from our dotfiles
+package_file = "~/.dotfiles/packages/global-packages/npm-global.txt"
+
+# Python plugin settings  
+[plugins.python]
+# Install pip packages from requirements
+auto_install_packages = false
+
+# Tasks (mise can also run project tasks)
+[tasks]
+# Example task definitions can be added here
+
+# Environment variables
+[env]
+# Global environment variables can be set here
+# Example:
+# NODE_ENV = "development"

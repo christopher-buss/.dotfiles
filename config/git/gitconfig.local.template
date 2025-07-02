@@ -1,0 +1,15 @@
+# Local git configuration (not tracked by git)
+# Copy this file to ~/.gitconfig.local and fill in your values
+
+[user]
+	# Your GPG signing key (run 'gpg --list-secret-keys --keyid-format LONG' to find it)
+	signingkey = YOUR_GPG_KEY_ID
+
+# Machine-specific configurations can go here
+# [credential]
+#	helper = osxkeychain    # macOS
+#	helper = manager-core   # Windows
+#	helper = libsecret      # Linux
+
+# [core]
+#	sshCommand = ssh -i ~/.ssh/id_rsa_work    # Work-specific SSH key

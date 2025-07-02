@@ -1,0 +1,36 @@
+# Global Cargo tools
+# Install with: cargo install $(cat cargo-tools.txt | tr '\n' ' ')
+
+# Development Tools
+cargo-edit         # Add/remove dependencies easily
+cargo-watch        # Watch for changes and rebuild
+cargo-expand       # Show macro expansions
+cargo-outdated     # Check for outdated dependencies
+
+# Code Quality
+clippy             # Rust linter
+rustfmt            # Code formatter
+
+# Utilities
+bat                # Better cat with syntax highlighting
+exa                # Better ls
+ripgrep            # Fast grep alternative
+fd-find            # Better find
+tokei              # Count lines of code
+hyperfine          # Benchmarking tool
+
+# Development Servers
+basic-http-server  # Simple HTTP server
+microserver        # Minimal HTTP server
+
+# System Tools
+bottom             # Better top/htop
+du-dust            # Better du
+procs              # Better ps
+
+# Optional Tools (uncomment if needed)
+# cargo-generate    # Generate projects from templates
+# cargo-audit       # Security audit
+# cargo-tree        # Show dependency tree
+# diesel_cli        # Database ORM CLI
+# sqlx-cli          # Async SQL toolkit CLI

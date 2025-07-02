@@ -1,0 +1,56 @@
+# Homebrew Bundle File
+# Install with: brew bundle install
+
+# Taps
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+
+# Essential System Tools
+brew "git"                    # Version control
+brew "gh"                     # GitHub CLI
+brew "curl"                   # HTTP client
+brew "wget"                   # File downloader
+
+# Shell & Terminal Enhancement
+brew "fzf"                    # Fuzzy finder
+brew "starship"               # Modern shell prompt
+brew "direnv"                 # Environment variable management
+brew "eza"                    # Modern ls replacement
+brew "bat"                    # Modern cat with syntax highlighting
+brew "ripgrep"                # Fast text search
+brew "fd"                     # Modern find replacement
+
+# Development Version Management
+brew "mise"                   # Modern version manager (replaces nvm, pyenv, etc.)
+brew "pnpm"                   # Fast, disk space efficient package manager
+
+# Development Tools
+brew "docker"                 # Containerization
+brew "jq"                     # JSON processor
+brew "yq"                     # YAML processor
+brew "delta"                  # Better git diff viewer
+brew "meld"                   # Visual diff and merge tool
+brew "shellcheck"             # Shell script static analysis
+
+# Compression & Archives
+brew "gzip"                   # Compression
+brew "unzip"                  # Archive extraction
+
+# Security & GPG
+brew "gnupg"                  # GPG encryption
+brew "pinentry-mac"           # GPG PIN entry
+
+# Network Tools
+brew "openssh"                # SSH client
+brew "rsync"                  # File synchronization
+
+# System Monitoring
+brew "htop"                   # Process viewer
+brew "tree"                   # Directory tree visualization
+
+# Fonts
+cask "font-jetbrains-mono-nerd-font"  # JetBrains Mono with Nerd Font icons
+
+# Casks (GUI Applications)
+cask "visual-studio-code"   # Code editor
+cask "docker"               # Docker Desktop

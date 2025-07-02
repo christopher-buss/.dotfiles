@@ -1,0 +1,11 @@
+# Global npm packages
+# Install with: npm install -g $(cat npm-global.txt | tr '\n' ' ')
+# Keep this list minimal - most tools should be project-local or handled by mise
+
+# Package Management & Maintenance
+npm-check-updates    # Check for outdated packages across projects
+corepack            # Node.js package manager handler
+
+# Utility CLI Tools (truly global utilities)
+serve               # Quick HTTP server for any directory
+json                # JSON manipulation from command line

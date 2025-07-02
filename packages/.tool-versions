@@ -1,0 +1,19 @@
+# mise tool versions
+# This file defines the default versions for development tools
+# Place this file in project root to override these defaults per project
+
+# Node.js - Current stable LTS
+nodejs 22.16.0
+
+# Python - For future Python development
+python 3.11.9
+
+# Package manager utility
+ni latest
+
+# Additional tools can be added as needed:
+# go 1.21.0
+# rust latest
+# ruby 3.2.0
+# java temurin-17
+# terraform 1.5.0
