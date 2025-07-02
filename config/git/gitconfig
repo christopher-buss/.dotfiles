@@ -129,6 +129,41 @@
 	staged = diff --staged
 	unstaged = diff
 	both = diff HEAD
+	
+	# Display all aliases
+	aliases = "!git config --get-regexp alias"
+	
+	# Safety & Workflow
+	pf = push --force-with-lease
+	car = commit --amend --no-edit
+	s = status --short --branch
+	
+	# WIP workflow
+	wip = "!git add -A && git commit --no-verify -m '--wip-- [skip ci]'"
+	unwip = "!git log -n 1 --pretty=format:'%s' | grep -q -- '--wip--' && git reset HEAD~1"
+	wips = "!git branch -v --no-abbrev | grep -- '--wip--'"
+	
+	# Hide/Show files
+	hide = update-index --skip-worktree
+	unhide = update-index --no-skip-worktree
+	hidden = "!git ls-files -v . | grep '^S' | cut -c3-"
+	unhide-all = "!git hidden | xargs -r git unhide"
+	
+	# Worktree management
+	wk = worktree
+	wkls = worktree list
+	wkadd = "!f() { git worktree add ../$1 $2 -b $1; }; f"
+	wkrm = "!git worktree remove ."
+	wkrmf = "!git worktree remove --force ."
+	
+	# Better log views
+	lg = log --oneline --decorate --graph
+	lga = log --oneline --decorate --graph --all
+	lgb = log --oneline --decorate --graph --branches
+	
+	# Utilities
+	authors = shortlog -n -s
+	branch-name = rev-parse --abbrev-ref HEAD
 
 [help]
 	autocorrect = 10
@@ -176,45 +211,6 @@
 
 [url "https://github.com/"]
 	insteadOf = gh:
-
-[alias]
-	# Display all aliases
-	aliases = ! git config --list | awk '/alias/{ print $1 }' | perl -pe 's/alias\.//g' | perl -pe 's/=.+//g'
-	
-	# Safety & Workflow
-	pf = push --force-with-lease
-	car = commit --amend --no-edit
-	s = status --short --branch
-	
-	# WIP workflow
-	wip = ! "f() { git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify -m '--wip-- [skip ci]'; }; f"
-	unwip = ! "f() { git log -n 1 | grep -q -c '\-\-wip\-\-' && git reset HEAD~1; }; f"
-	wips = ! git branch -v --no-abbrev | grep '\-\-wip\-\-'
-	
-	# Hide/Show files
-	hide = update-index --skip-worktree
-	unhide = update-index --no-skip-worktree
-	hidden = ! git ls-files -v . | grep ^S | awk '{ print $2 }'
-	unhide-all = ! cd $(git rev-parse --show-toplevel || echo ".") && git hidden | xargs git unhide
-	
-	# Worktree management
-	wk = worktree
-	wkls = worktree list
-	wkadd = ! "f() { git worktree add ../$(echo \"$1\" | sed \"s./.--.g\") $2 -b $1 && echo \"$2\" | grep -qv \"^origin/\" || git branch --unset-upstream $1; }; f"
-	wkrm = ! "test -f .git && branch=$(git symbolic-ref --short HEAD) && default_branch=$(git symbolic-ref --short refs/remotes/origin/HEAD) && test $(git merge-base $default_branch HEAD) = $(git rev-parse HEAD) && git checkout --detach && git branch -d $branch && git worktree remove ."
-	wkrmf = ! "test -f .git && branch=$(git symbolic-ref --short HEAD) && git checkout --detach && git branch -D $branch && git worktree remove ."
-	
-	# Better log views
-	lg = -c color.diff=true log --oneline --decorate --graph
-	lga = -c color.diff=true log --oneline --decorate --graph --all
-	lgb = -c color.diff=true log --oneline --decorate --graph --branches
-	
-	# Utilities
-	authors = shortlog -n -s
-	diverge = ! "git lg $(git merge-base $1 $2)^..$1 $(git merge-base $1 $2)^..$2"
-	repo-name = ! "[ -n \"$(git remote)\" ] && git remote -v | head -1 | cut -d ' ' -f 1 | grep -E --only-matching '([^:/ ]+/[^/ ]+)(\\.git)?$' | sed 's/\\.git$//' || basename $(pwd)"
-	branch-name = ! "git rev-parse HEAD >/dev/null 2>&1 && git rev-parse --abbrev-ref HEAD || echo '???no-branch???'"
-	repo-and-branch-name = ! "echo $(git repo-name)':'$(git branch-name)"
 
 # Include local git config if it exists
 [include]
