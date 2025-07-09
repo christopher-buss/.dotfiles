@@ -7,15 +7,14 @@ Personal development environment configuration files for consistent setup across
 ### New Machine Setup
 
 ```bash
-# Clone and bootstrap
-curl -fsSL https://raw.githubusercontent.com/christopher-buss/dotfiles/main/scripts/bootstrap.sh | bash -s -- https://github.com/christopher-buss/dotfiles.git
+curl -fsSL https://raw.githubusercontent.com/christopher-buss/.dotfiles/main/scripts/bootstrap.sh | bash -s -- https://github.com/christopher-buss/dotfiles.git
 ```
 
 ### Manual Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/christopher-buss/dotfiles.git ~/.dotfiles
+git clone https://github.com/christopher-buss/.dotfiles.git ~/.dotfiles
 
 # Run the installation script
 cd ~/.dotfiles
