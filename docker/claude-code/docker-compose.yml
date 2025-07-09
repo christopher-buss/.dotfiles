@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  claude-code:
+    build:
+      context: ../..
+      dockerfile: docker/claude-code/Dockerfile
+    container_name: claude-code-dev
+    user: claude
+    working_dir: /home/claude/workspace
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SHELL=/bin/zsh
+    volumes:
+      # Mount current directory as workspace
+      - .:/home/claude/workspace
+      # Mount authentication and configs (read-only)
+      - ${HOME}/.claude:/home/claude/.claude:ro
+      - ${HOME}/.gitconfig:/home/claude/.gitconfig:ro
+      - ${HOME}/.ssh:/home/claude/.ssh:ro
+      # Optional: mount other configs if they exist
+      - ${HOME}/.aws:/home/claude/.aws:ro
+      - ${HOME}/.config/gcloud:/home/claude/.config/gcloud:ro
+    cap_add:
+      - NET_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    stdin_open: true
+    tty: true
+    command: >
+      bash -c "
+        sudo /home/claude/init-firewall.sh &&
+        echo 'Claude Code container ready! Run: claude --dangerously-skip-permissions' &&
+        /bin/zsh
+      "
+    networks:
+      - claude-network
+
+networks:
+  claude-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "false"
+      com.docker.network.bridge.enable_ip_masquerade: "true"

@@ -37,6 +37,36 @@ jobs:
           exit 1
         fi
         
+        if [ ! -x "scripts/setup-winget.sh" ]; then
+          echo "❌ scripts/setup-winget.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "scripts/setup-docker-desktop.sh" ]; then
+          echo "❌ scripts/setup-docker-desktop.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "scripts/docker-kill.sh" ]; then
+          echo "❌ scripts/docker-kill.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "docker/claude-code/scripts/claude-docker.sh" ]; then
+          echo "❌ docker/claude-code/scripts/claude-docker.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "docker/claude-code/scripts/init-firewall.sh" ]; then
+          echo "❌ docker/claude-code/scripts/init-firewall.sh is not executable"
+          exit 1
+        fi
+        
+        if [ ! -x "docker/claude-code/scripts/entrypoint.sh" ]; then
+          echo "❌ docker/claude-code/scripts/entrypoint.sh is not executable"
+          exit 1
+        fi
+        
         echo "✅ All scripts have correct permissions"
     
     - name: Validate shell scripts
@@ -96,7 +126,7 @@ jobs:
         done
         
         # Check config subdirectories
-        config_dirs=("config/shell" "config/git" "config/zsh" "config/starship")
+        config_dirs=("config/shell" "config/git" "config/zsh" "config/starship" "config/windows-terminal" "config/powertoys" "config/docker" "config/claude")
         
         for dir in "${config_dirs[@]}"; do
           if [ ! -d "$dir" ]; then
@@ -104,6 +134,18 @@ jobs:
             exit 1
           else
             echo "✅ Config directory '$dir' exists"
+          fi
+        done
+        
+        # Check Docker configuration subdirectories
+        docker_dirs=("docker/claude-code" "docker/claude-code/scripts" "docker/claude-code/.devcontainer")
+        
+        for dir in "${docker_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Required Docker directory '$dir' is missing"
+            exit 1
+          else
+            echo "✅ Docker directory '$dir' exists"
           fi
         done
         
@@ -126,6 +168,58 @@ jobs:
           echo "⚠️  Shell aliases not found (optional)"
         fi
         
+        # Check Windows Terminal configuration
+        if [ -f "config/windows-terminal/settings.json" ]; then
+          echo "✅ Windows Terminal configuration found"
+          # Validate JSON syntax
+          if command -v jq &> /dev/null; then
+            jq empty config/windows-terminal/settings.json && echo "✅ Windows Terminal JSON syntax valid"
+          elif python3 -c "import json; json.load(open('config/windows-terminal/settings.json'))" 2>/dev/null; then
+            echo "✅ Windows Terminal JSON syntax valid"
+          fi
+        else
+          echo "⚠️  Windows Terminal configuration not found (optional)"
+        fi
+        
+        # Check PowerToys configuration
+        if [ -f "config/powertoys/settings.json" ]; then
+          echo "✅ PowerToys configuration found"
+          # Validate JSON syntax
+          if command -v jq &> /dev/null; then
+            jq empty config/powertoys/settings.json && echo "✅ PowerToys JSON syntax valid"
+          elif python3 -c "import json; json.load(open('config/powertoys/settings.json'))" 2>/dev/null; then
+            echo "✅ PowerToys JSON syntax valid"
+          fi
+        else
+          echo "⚠️  PowerToys configuration not found (optional)"
+        fi
+        
+        # Check Docker configuration
+        if [ -f "config/docker/settings-store.json" ]; then
+          echo "✅ Docker Desktop configuration found"
+          # Validate JSON syntax
+          if command -v jq &> /dev/null; then
+            jq empty config/docker/settings-store.json && echo "✅ Docker JSON syntax valid"
+          elif python3 -c "import json; json.load(open('config/docker/settings-store.json'))" 2>/dev/null; then
+            echo "✅ Docker JSON syntax valid"
+          fi
+        else
+          echo "⚠️  Docker Desktop configuration not found (optional)"
+        fi
+        
+        # Check package files
+        if [ -f "packages/winget-packages.json" ]; then
+          echo "✅ Winget packages configuration found"
+          # Validate JSON syntax
+          if command -v jq &> /dev/null; then
+            jq empty packages/winget-packages.json && echo "✅ Winget packages JSON syntax valid"
+          elif python3 -c "import json; json.load(open('packages/winget-packages.json'))" 2>/dev/null; then
+            echo "✅ Winget packages JSON syntax valid"
+          fi
+        else
+          echo "⚠️  Winget packages configuration not found (optional)"
+        fi
+        
         # Validate git config syntax if it exists
         if [ -f "config/git/gitconfig" ]; then
           git config --file=config/git/gitconfig --list > /dev/null
@@ -142,8 +236,59 @@ jobs:
         bash -n scripts/bootstrap.sh && echo "✅ Bootstrap script syntax valid"
         bash -n scripts/install-packages.sh && echo "✅ Install packages script syntax valid"
         bash -n scripts/update.sh && echo "✅ Update script syntax valid"
+        bash -n scripts/setup-winget.sh && echo "✅ Winget setup script syntax valid"
+        bash -n scripts/setup-docker-desktop.sh && echo "✅ Docker Desktop setup script syntax valid"
+        bash -n scripts/docker-kill.sh && echo "✅ Docker kill script syntax valid"
+        
+        # Test Docker scripts
+        bash -n docker/claude-code/scripts/claude-docker.sh && echo "✅ Claude Docker script syntax valid"
+        bash -n docker/claude-code/scripts/init-firewall.sh && echo "✅ Firewall init script syntax valid"
+        bash -n docker/claude-code/scripts/entrypoint.sh && echo "✅ Docker entrypoint script syntax valid"
         
         echo "✅ Scripts functionality validated"
+    
+    - name: Validate Docker configuration
+      run: |
+        echo "Validating Docker configuration..."
+        
+        # Check Dockerfile syntax
+        if [ -f "docker/claude-code/Dockerfile" ]; then
+          echo "✅ Dockerfile found"
+          # Basic Dockerfile validation
+          if grep -q "FROM " docker/claude-code/Dockerfile; then
+            echo "✅ Dockerfile has valid FROM instruction"
+          else
+            echo "❌ Dockerfile missing FROM instruction"
+            exit 1
+          fi
+        else
+          echo "❌ Dockerfile not found"
+          exit 1
+        fi
+        
+        # Check devcontainer configuration
+        if [ -f "docker/claude-code/.devcontainer/devcontainer.json" ]; then
+          echo "✅ Devcontainer configuration found"
+          # Validate JSON syntax
+          if command -v jq &> /dev/null; then
+            jq empty docker/claude-code/.devcontainer/devcontainer.json && echo "✅ Devcontainer JSON syntax valid"
+          elif python3 -c "import json; json.load(open('docker/claude-code/.devcontainer/devcontainer.json'))" 2>/dev/null; then
+            echo "✅ Devcontainer JSON syntax valid"
+          fi
+        else
+          echo "❌ Devcontainer configuration not found"
+          exit 1
+        fi
+        
+        # Check docker-compose configuration
+        if [ -f "docker/claude-code/docker-compose.yml" ]; then
+          echo "✅ Docker Compose configuration found"
+        else
+          echo "❌ Docker Compose configuration not found"
+          exit 1
+        fi
+        
+        echo "✅ Docker configuration validated"
 
   test-matrix:
     runs-on: ${{ matrix.os }}
@@ -168,5 +313,8 @@ jobs:
         bash -n scripts/update.sh
         bash -n scripts/install-packages.sh
         bash -n scripts/setup-mise.sh
+        bash -n scripts/setup-winget.sh
+        bash -n scripts/setup-docker-desktop.sh
+        bash -n scripts/docker-kill.sh
         
         echo "✅ Basic tests passed on ${{ matrix.os }}"

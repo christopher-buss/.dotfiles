@@ -1,0 +1,39 @@
+{
+  "settingsVersion": 5,
+  "wslEngineEnabled": true,
+  "useVirtualizationFramework": true,
+  "enableWSLIntegration": true,
+  "wslIntegrationDistros": {
+    "Ubuntu": true,
+    "Ubuntu-20.04": true,
+    "Ubuntu-22.04": true
+  },
+  "autoStart": true,
+  "openUIOnStartupDisabled": false,
+  "analyticsEnabled": false,
+  "showWhatsNewWindow": false,
+  "skipUpdateToWSLPrompt": true,
+  "enableUsageStatistics": false,
+  "enableTelemetry": false,
+  "disableUpdate": false,
+  "displayedWhatsNewInVersions": [],
+  "theme": "dark",
+  "useGrpcfuse": false,
+  "vpnKitMaxPortIdleTime": "300s",
+  "allowExperimentalFeatures": false,
+  "dockerDesktopForWindowsEnabled": true,
+  "hypervEnabled": false,
+  "windowsContainersEnabled": false,
+  "wslEngineDistro": "Ubuntu",
+  "cpus": 8,
+  "diskSizeMiB": 524288,
+  "swapMiB": 4096,
+  "dockerCliOptions": {
+    "stackOrchestrator": "swarm",
+    "experimental": false
+  },
+  "proxyHttpMode": "none",
+  "proxyHttp": "",
+  "proxyHttps": "",
+  "proxyExclude": ""
+}

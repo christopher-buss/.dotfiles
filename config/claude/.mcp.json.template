@@ -1,0 +1,27 @@
+{
+  "_comment": "Project-specific MCP Server Configuration Template",
+  "_usage": [
+    "1. Copy this file to your project root as .mcp.json",
+    "2. Customize the server configurations below for your project",
+    "3. Remove or comment out servers you don't need",
+    "4. Run 'claude config doctor' to verify configuration",
+    "5. Restart Claude Code to load the new servers"
+  ],
+  "_security_note": "These servers are scoped to the current project directory only",
+  
+  "mcpServers": {
+    "project-git": {
+      "_description": "Git integration for this project repository",
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-git", "--repository", "."],
+      "_capabilities": ["read commits", "branch info", "file history", "diff viewing"]
+    },   
+  },
+  
+  "_installation_notes": {
+    "install_mcp_servers": "npm install -g @modelcontextprotocol/server-*",
+    "verify_installation": "npx @modelcontextprotocol/server-git --help",
+    "project_scope": "This config only affects the current project directory",
+    "global_servers": "Global MCP servers are configured in ~/.claude/settings.json"
+  }
+}

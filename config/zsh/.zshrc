@@ -35,18 +35,7 @@ export VSCODE_SUGGEST=1
 export PATH=$HOME/bin:$PATH
 export PATH="$BREW/bin:$PATH"
 
-### ---- Advanced Claude CLI aliases (Zsh-specific) -----------------------------------
-# Output format shortcuts
-alias claude-json="claude -p --output-format json"
-alias claude-stream="claude -p --output-format stream-json"
-
-# Security shortcuts (use carefully)
-alias claude-safe="claude --allowedTools 'Edit,View'"
-alias claude-read="claude --allowedTools 'View'"
-alias claude-dev="claude --allowedTools 'Edit,View,Bash(git:*),Bash(npm:*)'"
-
-# DANGEROUS - only for isolated environments
-alias yolo="claude --dangerously-skip-permissions"
+# Claude CLI aliases are loaded from ~/.aliases
 
 ### ---- Package Management aliases -----------------------------------
 # Homebrew

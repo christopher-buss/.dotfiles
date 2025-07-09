@@ -1,0 +1,78 @@
+{
+  "defaultModel": "claude-sonnet-4",
+  "env": {
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_TELEMETRY": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "hasCompletedProjectOnboarding": true,
+  "hasTrustDialogAccepted": true,
+  "allowedTools": ["Edit", "View"],
+  "autoConnectIde": false,
+  "defaultMode": "plan",
+  "ignorePatterns": [
+    "*.log",
+    "*.tmp",
+    ".env*",
+    ".envrc*",
+    "dist/*",
+    "build/*",
+    "target/*",
+    ".git/*",
+    "*.key",
+    "coverage/*",
+    ".pytest_cache/*",
+    "__pycache__/*",
+    "*.pyc",
+    ".venv/*",
+    "venv/*",
+    ".cargo/*",
+    "Cargo.lock",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    ".DS_Store",
+    "Thumbs.db",
+    "*.swp",
+    "*.swo",
+    "*~",
+    "*.sublime-*",
+    ".dotfiles-backup-*/*"
+  ],
+  "mcpServers": {
+    "context7": {
+      "type": "sse",
+      "url": "https://mcp.context7.com/sse"
+    }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/smart-lint.sh"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/smart-test.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/ntfy-notifier.sh notification"
+          }
+        ]
+      }
+    ]
+  }
+}

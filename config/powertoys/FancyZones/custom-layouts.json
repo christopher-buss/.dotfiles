@@ -1,0 +1,56 @@
+{
+  "custom-layouts": [
+    {
+      "uuid": "{555A5FA0-9E94-48FD-AC0F-24E8B96049A1}",
+      "name": "Custom layout 1",
+      "type": "grid",
+      "info": {
+        "rows": 1,
+        "columns": 2,
+        "rows-percentage": [
+          10000
+        ],
+        "columns-percentage": [
+          5935,
+          4065
+        ],
+        "cell-child-map": [
+          [
+            0,
+            1
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 16,
+        "sensitivity-radius": 20
+      }
+    },
+    {
+      "uuid": "{CE9D9D9F-F5F5-433C-977E-FF59A4A0CD11}",
+      "name": "Priority Grid (1)",
+      "type": "grid",
+      "info": {
+        "rows": 1,
+        "columns": 3,
+        "rows-percentage": [
+          10000
+        ],
+        "columns-percentage": [
+          2500,
+          5000,
+          2500
+        ],
+        "cell-child-map": [
+          [
+            0,
+            1,
+            2
+          ]
+        ],
+        "show-spacing": false,
+        "spacing": 16,
+        "sensitivity-radius": 20
+      }
+    }
+  ]
+}

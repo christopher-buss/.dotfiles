@@ -5,17 +5,15 @@
 
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Source shared helpers once downloaded
+DOTFILES_DIR="$HOME/.dotfiles"
+HELPERS_FILE="$DOTFILES_DIR/lib/shell-helpers.sh"
 
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+# Temporary logging functions (before helpers are available)
+log_info() { echo -e "\033[0;34m[INFO]\033[0m $1"; }
+log_success() { echo -e "\033[0;32m[SUCCESS]\033[0m $1"; }
+log_warning() { echo -e "\033[1;33m[WARNING]\033[0m $1"; }
+log_error() { echo -e "\033[0;31m[ERROR]\033[0m $1"; }
 
 # Check if command exists
 command_exists() {
@@ -64,6 +62,12 @@ clone_dotfiles() {
 # Run installation
 run_installation() {
     log_info "Running dotfiles installation..."
+    
+    # Source helpers if available
+    if [[ -f "$HELPERS_FILE" ]]; then
+        source "$HELPERS_FILE"
+        log_info "Using shared helper functions"
+    fi
     
     if [ -f "./install.sh" ]; then
         ./install.sh

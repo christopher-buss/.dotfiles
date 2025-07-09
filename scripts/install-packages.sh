@@ -7,22 +7,58 @@ set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+# Source shared helpers
+source "$DOTFILES_DIR/lib/shell-helpers.sh"
 
-# Logging functions
-log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+# Detect operating system
+detect_os() {
+    if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" ]]; then
+        echo "windows"
+    elif [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "macos"
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+        # Check if we're in WSL
+        if [[ -f "/proc/version" ]] && grep -q "microsoft\|WSL" /proc/version; then
+            echo "wsl"
+        else
+            echo "linux"
+        fi
+    else
+        echo "unknown"
+    fi
+}
 
-# Check if command exists
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
+# Install essential packages via system package manager
+install_system_packages() {
+    local pm=$(detect_package_manager)
+    
+    case "$pm" in
+        apt)
+            log_info "Installing essential packages via apt..."
+            sudo apt-get update
+            sudo apt-get install -y \
+                git curl wget build-essential zsh \
+                gnupg openssh-client rsync htop tree \
+                software-properties-common
+            
+            # Add Bitwarden CLI from snap or direct download
+            if command_exists snap; then
+                sudo snap install bw
+                log_success "Bitwarden CLI installed via snap"
+            fi
+            ;;
+        yum)
+            log_info "Installing essential packages via yum..."
+            sudo yum install -y git curl wget zsh gcc gnupg2 openssh-clients rsync htop tree
+            ;;
+        pacman)
+            log_info "Installing essential packages via pacman..."
+            sudo pacman -S --noconfirm git curl wget zsh base-devel gnupg openssh rsync htop tree
+            ;;
+        *)
+            log_warning "Unknown package manager, skipping system packages"
+            ;;
+    esac
 }
 
 # Install Homebrew if not present
@@ -88,6 +124,23 @@ setup_mise() {
     log_success "mise setup completed"
 }
 
+# Install Claude Code CLI
+install_claude_code() {
+    if command_exists claude; then
+        log_info "Claude Code already installed"
+        return 0
+    fi
+    
+    log_info "Installing Claude Code CLI..."
+    
+    if curl -fsSL claude.ai/install.sh | bash; then
+        log_success "Claude Code installed successfully"
+    else
+        log_error "Failed to install Claude Code"
+        return 1
+    fi
+}
+
 # Install global npm packages
 install_npm_globals() {
     if [[ -f "$DOTFILES_DIR/packages/global-packages/npm-global.txt" ]]; then
@@ -143,20 +196,56 @@ install_pip_globals() {
 main() {
     log_info "Starting package installation..."
     
-    # Install package managers
-    install_homebrew
-    install_brew_packages
+    local os=$(detect_os)
+    log_info "Detected OS: $os"
     
-    # Setup development tools
-    setup_mise
-    
-    # Install global packages
-    install_npm_globals
-    install_cargo_tools
-    install_pip_globals
+    case "$os" in
+        "windows"|"wsl")
+            setup_winget
+            
+            # Install Claude Code CLI for WSL
+            if [[ "$os" == "wsl" ]]; then
+                install_claude_code
+            fi
+            ;;
+        "macos"|"linux")
+            # Install system packages first
+            install_system_packages
+            
+            # Install package managers
+            install_homebrew
+            install_brew_packages
+            
+            # Setup development tools
+            setup_mise
+            
+            # Install Claude Code CLI
+            install_claude_code
+            
+            # Install global packages
+            install_npm_globals
+            install_cargo_tools
+            install_pip_globals
+            ;;
+        *)
+            log_error "Unsupported operating system: $os"
+            exit 1
+            ;;
+    esac
     
     log_success "Package installation completed!"
     log_info "You may need to restart your shell or run 'source ~/.zshrc' to use the new tools"
+}
+
+# Setup Windows packages via winget
+setup_winget() {
+    log_info "Setting up Windows packages via winget..."
+    
+    if [[ -f "$DOTFILES_DIR/scripts/setup-winget.sh" ]]; then
+        "$DOTFILES_DIR/scripts/setup-winget.sh"
+    else
+        log_warning "setup-winget.sh not found, skipping winget setup"
+    fi
 }
 
 # Run main function if script is executed directly

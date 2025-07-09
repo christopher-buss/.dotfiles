@@ -13,5 +13,9 @@ fi
 . "$HOME/.cargo/env"
 . "$HOME/.local/bin/env"
 
-# Bun completions
-[ -s "/home/isentinel/.bun/_bun" ] && source "/home/isentinel/.bun/_bun"
+# PNPM setup
+export PNPM_HOME="/home/isentinel/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac

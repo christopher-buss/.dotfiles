@@ -1,0 +1,8 @@
+{
+  "customTrayTimes": {
+    "1 hour": 3600,
+    "2 hours": 7200,
+    "4 hours": 14400,
+    "8 hours": 28800
+  }
+}

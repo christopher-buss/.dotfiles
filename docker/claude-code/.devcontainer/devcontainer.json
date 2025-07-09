@@ -1,0 +1,42 @@
+{
+  "name": "Claude Code Development Environment",
+  "build": {
+    "context": "..",
+    "dockerfile": "../Dockerfile"
+  },
+  "features": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-json"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/bin/zsh"
+          }
+        }
+      }
+    }
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/home/claude/workspace,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.claude,target=/home/claude/.claude,type=bind,readonly",
+    "source=${localEnv:HOME}/.gitconfig,target=/home/claude/.gitconfig,type=bind,readonly",
+    "source=${localEnv:HOME}/.ssh,target=/home/claude/.ssh,type=bind,readonly"
+  ],
+  "remoteUser": "claude",
+  "workspaceFolder": "/home/claude/workspace",
+  "postCreateCommand": "sudo /home/claude/init-firewall.sh",
+  "postStartCommand": "echo 'Claude Code container ready! Run: claude --dangerously-skip-permissions'",
+  "shutdownAction": "stopContainer",
+  "containerEnv": {
+    "ANTHROPIC_API_KEY": "${localEnv:ANTHROPIC_API_KEY}"
+  },
+  "runArgs": [
+    "--cap-add=NET_ADMIN",
+    "--security-opt=apparmor:unconfined",
+    "--name=claude-code-dev"
+  ]
+}

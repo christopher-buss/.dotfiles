@@ -1,0 +1,111 @@
+# Project-Specific Environment Variables
+# Managed by direnv for automatic loading when entering this directory
+#
+# SETUP INSTRUCTIONS:
+# 1. Copy this file to your project root as .envrc:
+#    cp ~/.dotfiles/config/shell/.envrc.project.template .envrc
+# 2. Customize the variables below for your project
+# 3. Enable direnv for this project:
+#    direnv allow .envrc
+# 4. Variables will load automatically when you cd into this directory
+#
+# SECURITY NOTE:
+# - Add .envrc to your project's .gitignore
+# - Never commit API keys or secrets to version control
+# - Use different keys for development/staging/production
+
+# =============================================================================
+# INHERIT GLOBAL CONFIGURATION
+# =============================================================================
+# Load global API keys from ~/.envrc (if it exists)
+source_env ~/.envrc
+
+# =============================================================================
+# PROJECT-SPECIFIC API KEYS
+# =============================================================================
+# Override global keys for this project if needed
+
+# Project-specific Anthropic API key (different from global)
+# export ANTHROPIC_API_KEY="sk-project-specific-anthropic-key"
+
+# Project-specific OpenAI API key
+# export OPENAI_API_KEY="sk-project-specific-openai-key"
+
+# =============================================================================
+# DATABASE & SERVICE CONFIGURATION
+# =============================================================================
+
+# Database connection strings
+# export DATABASE_URL="postgresql://user:pass@localhost:5432/myproject"
+# export REDIS_URL="redis://localhost:6379/0"
+
+# Service endpoints
+# export API_BASE_URL="http://localhost:3000"
+# export WEBHOOK_URL="https://myproject.ngrok.io/webhooks"
+
+# =============================================================================
+# BUILD & DEPLOYMENT CONFIGURATION
+# =============================================================================
+
+# Node.js environment
+# export NODE_ENV="development"
+
+# Python environment
+# export FLASK_ENV="development"
+# export DJANGO_SETTINGS_MODULE="myproject.settings.development"
+
+# Go environment
+# export GO_ENV="development"
+
+# Rust environment
+# export RUST_LOG="debug"
+
+# =============================================================================
+# PROJECT-SPECIFIC TOOLS
+# =============================================================================
+
+# Tool versions (override global .tool-versions)
+# echo "node 18.16.0" > .tool-versions
+# echo "python 3.11.0" >> .tool-versions
+
+# Path additions for project tools
+# PATH_add "./bin"
+# PATH_add "./scripts"
+# PATH_add "./node_modules/.bin"
+
+# =============================================================================
+# DEVELOPMENT WORKFLOW
+# =============================================================================
+
+# Port numbers for local development
+# export PORT="3000"
+# export DEBUG_PORT="9229"
+
+# Feature flags
+# export FEATURE_NEW_UI="true"
+# export DEBUG_MODE="true"
+
+# =============================================================================
+# USAGE EXAMPLES
+# =============================================================================
+#
+# Common direnv patterns for projects:
+#
+# # Load specific Python version and create virtualenv
+# use python 3.11
+# layout python
+#
+# # Load Node.js version and install dependencies
+# use node 18.16.0
+# npm install
+#
+# # Load environment from .env file
+# dotenv .env.local
+#
+# # Set up path for local binaries
+# PATH_add ./bin
+# PATH_add ./scripts
+#
+# # Watch files and restart server
+# watch_file package.json
+# watch_file requirements.txt

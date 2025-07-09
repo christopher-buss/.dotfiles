@@ -1,5 +1,2 @@
-# Load environment from .zshenv
-source ~/.zshenv
-
-# Additional profile configurations for login shells
-# Add any login-specific commands here
+# Set PATH, MANPATH, etc., for Homebrew.
+eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)

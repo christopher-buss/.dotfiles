@@ -7,16 +7,30 @@ alias ....='cd ../../..'
 alias ~='cd ~'
 alias -- -='cd -'
 
-# ls aliases
-alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
+# ls aliases (modern eza if available, fallback to ls)
+if command -v eza >/dev/null 2>&1; then
+    alias ls='eza --color=auto'
+    alias ll='eza -alF'
+    alias la='eza -A'
+    alias l='eza -F'
+    alias lt='eza -al --sort=modified'
+    alias lh='eza -alh'
+else
+    alias ls='ls --color=auto'
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
+fi
 
-# grep aliases
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+# grep aliases (modern ripgrep if available, fallback to grep)
+if command -v rg >/dev/null 2>&1; then
+    alias grep='rg --color=auto'
+    alias rg='rg --color=auto'
+else
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
 
 # Safety aliases
 alias rm='rm -i'
@@ -35,19 +49,25 @@ alias gb='git branch'
 alias gco='git checkout'
 alias glog='git log --oneline --graph --decorate'
 
-# Directory listings
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias lt='ls -altr'    # Sort by date, newest last
-alias lh='ls -alh'     # Human readable sizes
+# Directory listings (removed duplicate - handled above with modern tools)
 
-# System monitoring
-alias df='df -h'
+# System monitoring (modern tools if available, fallback to traditional)
+if command -v duf >/dev/null 2>&1; then
+    alias df='duf'
+else
+    alias df='df -h'
+fi
+
+if command -v btop >/dev/null 2>&1; then
+    alias top='btop'
+    alias htop='btop'
+elif command -v htop >/dev/null 2>&1; then
+    alias top='htop'
+fi
+
 alias du='du -h'
 alias free='free -h'
 alias ps='ps aux'
-alias top='htop'       # Use htop if available
 alias ports='netstat -tulanp'
 
 # Network
@@ -60,29 +80,61 @@ alias serve='python3 -m http.server 8000'
 alias weather='curl wttr.in'
 alias reload='source ~/.zshrc 2>/dev/null || source ~/.bashrc'
 
+# Modern tool shortcuts
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat'
+fi
+
+if command -v fd >/dev/null 2>&1; then
+    alias find='fd'
+fi
+
 # Dotfiles management
 alias dotfiles='cd ~/.dotfiles'
 alias dotupdate='~/.dotfiles/scripts/update.sh'
 alias dotcheck='find ~/.dotfiles -name "*.sh" -exec shellcheck {} \;'
 
 # Claude CLI shortcuts - basic commands for all shells
-alias claude="/home/isentinel/.claude/local/claude"
+alias claude="$HOME/.claude/local/claude"
 alias cl="claude"
 alias clp="claude -p"
+alias clr="claude -r"
 alias clc="claude -c"
 alias cls="claude /status"
 
-# Docker aliases (if using Docker)
+# Advanced Claude CLI aliases
+alias claude-json="claude -p --output-format json"
+alias claude-stream="claude -p --output-format stream-json"
+
+# Security shortcuts (use carefully)
+alias claude-safe="claude --allowedTools 'Edit,View'"
+alias claude-read="claude --allowedTools 'View'"
+alias claude-dev="claude --allowedTools 'Edit,View,Bash(git:*),Bash(npm:*)'"
+
+# DANGEROUS - only for isolated environments
+alias yolo="claude --dangerously-skip-permissions"
+
+# Claude Docker shortcuts
+alias claude-docker='~/.dotfiles/docker/claude-code/scripts/claude-docker.sh'
+alias cld='claude-docker'
+alias cld-build='claude-docker build'
+alias cld-run='claude-docker run'
+alias cld-stop='claude-docker stop'
+alias cld-status='claude-docker status'
+alias cld-exec='claude-docker exec'
+alias cld-logs='claude-docker logs'
+alias cld-clean='claude-docker clean'
+
+# Docker aliases
 alias d='docker'
 alias dc='docker-compose'
 alias dps='docker ps'
 alias dimg='docker images'
 
-# Kubernetes aliases (if using Kubernetes)
-alias k='kubectl'
-alias kgp='kubectl get pods'
-alias kgs='kubectl get services'
-alias kgn='kubectl get nodes'
+# Docker Desktop setup
+alias docker-setup='~/.dotfiles/scripts/setup-docker-desktop.sh'
+alias docker-kill='~/.dotfiles/scripts/docker-kill.sh'
+alias docker-restart='~/.dotfiles/scripts/docker-kill.sh restart'
 
 # Make and compile
 alias make='make -j$(nproc)'
@@ -94,7 +146,6 @@ alias cls='clear'
 # Quick edits
 alias zshconfig='${EDITOR:-vim} ~/.zshrc'
 alias bashconfig='${EDITOR:-vim} ~/.bashrc'
-alias vimconfig='${EDITOR:-vim} ~/.vimrc'
 
 # Load local aliases if they exist
 if [ -f ~/.aliases.local ]; then

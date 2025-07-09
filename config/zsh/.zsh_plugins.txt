@@ -1,0 +1,23 @@
+# ZSH Plugin list for Antidote
+# https://github.com/mattmc3/antidote
+
+# Syntax highlighting (load last for best performance)
+zdharma-continuum/fast-syntax-highlighting
+
+# Autosuggestions
+zsh-users/zsh-autosuggestions
+
+# Smart directory jumping
+agkozak/zsh-z
+
+# Easy directory bookmarking
+pkozelka/goto
+
+# Open git repo in browser
+paulirish/git-open
+
+# NVM lazy loading for Node.js version management
+lukechilds/zsh-nvm
+
+# ZSH abbreviations (installed via brew, managed separately)
+# brew install zsh-abbr

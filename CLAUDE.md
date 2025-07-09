@@ -24,6 +24,8 @@ This is a personal dotfiles repository for managing development environment conf
 - **Shell Tools**: Universal aliases, inputrc, profile, and shell utilities
 - **Git**: gitconfig with extensive aliases, GPG signing, and global gitignore
 - **Starship**: Custom prompt configuration with development context
+- **Windows Terminal**: Settings with startup actions for PowerShell and WSL tabs
+- **PowerToys**: Utility configurations with Awake, FancyZones, and Workspaces settings
 - **SSH**: connection configurations (not tracked for security)
 
 ## Common Commands
@@ -67,6 +69,22 @@ mise-update && brewup
 mise doctor
 ```
 
+### API Key Setup
+```bash
+# Setup API keys using direnv (recommended)
+cp config/shell/.envrc.template ~/.envrc
+$EDITOR ~/.envrc  # Fill in your API keys
+direnv allow ~/.envrc
+
+# For project-specific environments
+cp ~/.dotfiles/config/shell/.envrc.project.template .envrc
+$EDITOR .envrc  # Customize for your project  
+direnv allow .envrc
+
+# Verify API keys are loaded
+echo $ANTHROPIC_API_KEY
+```
+
 ### Development Workflow
 ```bash
 # Make executable after cloning
@@ -77,6 +95,46 @@ chmod +x install.sh scripts/*.sh
 
 # Validate configuration
 git config --file=config/git/gitconfig --list
+```
+
+### PowerToys Workflow
+```bash
+# Initial setup (installs base settings with Awake enabled)
+./install.sh
+
+# After configuring FancyZones, backup your layouts
+cp "%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\custom-layouts.json" config/powertoys/FancyZones/
+cp "%LOCALAPPDATA%\Microsoft\PowerToys\FancyZones\zones-settings.json" config/powertoys/FancyZones/
+
+# After creating Workspaces, backup configurations
+cp -r "%LOCALAPPDATA%\Microsoft\PowerToys\Workspaces\" config/powertoys/Workspaces/
+
+# After setting up Keyboard Manager, backup key mappings
+cp "%LOCALAPPDATA%\Microsoft\PowerToys\Keyboard Manager\default.json" config/powertoys/Keyboard\ Manager/
+
+# Reinstall to apply backed up settings
+./install.sh
+```
+
+### Claude Code Docker Workflow
+```bash
+# Build the secure Claude Code container
+./docker/claude-code/scripts/claude-docker.sh build
+
+# Run Claude Code in isolated container
+./docker/claude-code/scripts/claude-docker.sh run
+
+# Inside container, run Claude with full permissions safely
+claude --dangerously-skip-permissions
+
+# Alternative: VS Code devcontainer
+# Open project in VS Code, then "Reopen in Container"
+
+# Check container status
+./docker/claude-code/scripts/claude-docker.sh status
+
+# Stop container
+./docker/claude-code/scripts/claude-docker.sh stop
 ```
 
 ### CI/CD Testing
@@ -102,6 +160,7 @@ git config --file=config/git/gitconfig --list
 ```
 packages/
 ├── Brewfile                    # Homebrew packages
+├── winget-packages.json        # Windows packages via winget
 ├── .tool-versions              # mise managed runtimes
 ├── mise/config.toml           # mise configuration
 └── global-packages/
@@ -124,6 +183,7 @@ packages/
 - Support `.local` suffix for machine-specific overrides (git-ignored)
 - Private files use `.private` or `.secret` extensions (git-ignored)
 - Zsh configs create full shell environment with plugin support
+- Windows Terminal settings include startup actions for PowerShell and WSL tabs
 
 ### Script Organization
 - `install.sh`: Main installation script with modular functions per config category
@@ -139,6 +199,34 @@ packages/
 - Auto-setup for remote tracking branches with rebase by default
 - Git LFS support and auto-stashing during rebase
 - Includes `.gitconfig.local` for machine-specific settings
+
+### Windows Terminal Configuration
+- **Startup Actions**: Automatically opens PowerShell and WSL tabs on launch
+- **Font**: JetBrains Mono NL for consistent developer experience
+- **Profiles**: Pre-configured PowerShell and Ubuntu WSL profiles
+- **Keyboard Shortcuts**: Standard copy/paste, split panes, and search functionality
+- **Location**: `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json`
+- **Customization**: Modify `config/windows-terminal/settings.json` and run `./install.sh` on Windows
+
+### PowerToys Configuration
+- **Main Settings**: `settings.json` with Awake enabled and preferred module configuration
+- **Awake Module**: Custom tray times for 1, 2, 4, and 8 hours
+- **FancyZones**: Custom layouts and zone settings (backed up after configuration)
+- **Workspaces**: Workspace definitions (backed up after creation)
+- **Location**: `%LOCALAPPDATA%\Microsoft\PowerToys\`
+- **Readable JSON**: All settings stored in human-readable JSON format
+- **Version Control**: Settings are tracked and can be synced across machines
+- **Backup Strategy**: Add actual settings files to `config/powertoys/` after configuring modules
+
+### Claude Code Docker Configuration
+- **Secure Container**: Run Claude Code with `--dangerously-skip-permissions` safely
+- **Dotfiles Integration**: Container includes your complete development environment
+- **Network Security**: Firewall rules restrict container network access
+- **Authentication**: Mounts Claude authentication from host system
+- **VS Code Integration**: Devcontainer support for seamless development
+- **Isolation**: Docker prevents Claude from accessing host system files
+- **Non-root User**: Enhanced security through user isolation
+- **Flexible Access**: Both interactive and background container modes
 
 ## Key Aliases Available
 

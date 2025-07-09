@@ -19,6 +19,8 @@ brew "eza"                    # Modern ls replacement
 brew "bat"                    # Modern cat with syntax highlighting
 brew "ripgrep"                # Fast text search
 brew "fd"                     # Modern find replacement
+brew "antidote"               # ZSH plugin manager
+brew "zsh-abbr"               # ZSH abbreviations
 
 # Development Version Management
 brew "mise"                   # Modern version manager (replaces nvm, pyenv, etc.)
@@ -39,6 +41,7 @@ brew "unzip"                  # Archive extraction
 # Security & GPG
 brew "gnupg"                  # GPG encryption
 brew "pinentry-mac"           # GPG PIN entry
+brew "bitwarden-cli"          # Bitwarden password manager CLI
 
 # Network Tools
 brew "openssh"                # SSH client
@@ -46,7 +49,9 @@ brew "rsync"                  # File synchronization
 
 # System Monitoring
 brew "htop"                   # Process viewer
+brew "btop"                   # Modern htop with better visuals
 brew "tree"                   # Directory tree visualization
+brew "duf"                    # Modern df with colors
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"  # JetBrains Mono with Nerd Font icons

@@ -2,11 +2,4 @@
 # Ctrl+A to select all (move to beginning and select entire line)
 Control-a: "\C-a\C-k\C-y\C-a\C-k"
 
-# Additional readline settings
-set completion-ignore-case on
-set show-all-if-ambiguous on
-set show-all-if-unmodified on
-set mark-symlinked-directories on
-set visible-stats on
-
 # You can add other custom bindings here

@@ -1,0 +1,73 @@
+# Global API Keys and Environment Variables
+# Managed by direnv for automatic loading/unloading
+#
+# SETUP INSTRUCTIONS:
+# 1. Copy this file to ~/.envrc:
+#    cp config/shell/.envrc.template ~/.envrc
+# 2. Fill in your actual API keys
+# 3. Enable direnv for the file:
+#    direnv allow ~/.envrc
+# 4. Your API keys will now be available globally
+#
+# SECURITY NOTE:
+# - ~/.envrc is automatically ignored by git (via gitignore patterns)
+# - Never commit actual API keys to version control
+# - Use project-specific .envrc files for project overrides
+
+# =============================================================================
+# ANTHROPIC CLAUDE API
+# =============================================================================
+# Get your API key from: https://console.anthropic.com
+export ANTHROPIC_API_KEY="sk-your-anthropic-key-here"
+
+# =============================================================================
+# OTHER COMMON API KEYS
+# =============================================================================
+# Uncomment and fill in as needed
+
+# OpenAI API (ChatGPT, GPT-4, etc.)
+# Get your API key from: https://platform.openai.com/api-keys
+# export OPENAI_API_KEY="sk-your-openai-key-here"
+
+# GitHub Personal Access Token
+# Create at: https://github.com/settings/tokens
+# export GITHUB_TOKEN="ghp_your-github-token-here"
+
+# Notion API Token
+# Create at: https://www.notion.so/my-integrations
+# export NOTION_TOKEN="secret_your-notion-token-here"
+
+# =============================================================================
+# DEVELOPMENT ENVIRONMENT VARIABLES
+# =============================================================================
+
+# Default editor (if not set elsewhere)
+# export EDITOR="code"
+
+# Development environment indicator
+# export ENVIRONMENT="development"
+
+# =============================================================================
+# SHELL CONFIGURATION
+# =============================================================================
+
+# Enable direnv logging (set to 1 for debug output)
+# export DIRENV_LOG_FORMAT=""
+
+# =============================================================================
+# USAGE EXAMPLES
+# =============================================================================
+#
+# After setup, your API keys will be automatically available:
+#
+# # Test Anthropic API
+# curl -H "x-api-key: $ANTHROPIC_API_KEY" \
+#      -H "content-type: application/json" \
+#      https://api.anthropic.com/v1/messages
+#
+# # Use with Claude CLI
+# claude --api-key $ANTHROPIC_API_KEY "Hello, Claude!"
+#
+# # Override in project-specific .envrc:
+# echo 'export ANTHROPIC_API_KEY="sk-project-specific-key"' >> .envrc
+# direnv allow

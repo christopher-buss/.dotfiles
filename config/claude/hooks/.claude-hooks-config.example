@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# Example Claude Hooks Configuration
+# Copy this file to .claude-hooks-config.sh in your project root
+# and customize as needed for your project
+
+# Global hook controls
+export CLAUDE_HOOKS_ENABLED=true
+export CLAUDE_HOOKS_DEBUG=false
+export CLAUDE_HOOKS_FAIL_FAST=true
+
+# Language-specific hook controls
+export CLAUDE_HOOKS_GO_ENABLED=true
+export CLAUDE_HOOKS_PYTHON_ENABLED=true
+export CLAUDE_HOOKS_JAVASCRIPT_ENABLED=true
+export CLAUDE_HOOKS_RUST_ENABLED=true
+export CLAUDE_HOOKS_SHELL_ENABLED=true
+export CLAUDE_HOOKS_LUAU_ENABLED=true
+
+# Testing controls
+export CLAUDE_HOOKS_TESTS_ENABLED=true
+export CLAUDE_HOOKS_TESTS_REQUIRED=false
+
+# Notification controls
+export CLAUDE_HOOKS_NTFY_ENABLED=true
+export CLAUDE_HOOKS_NTFY_URL=""  # Set to your ntfy server URL
+
+# Performance controls
+export CLAUDE_HOOKS_MAX_FILES=1000
+
+# Go-specific settings
+export CLAUDE_HOOKS_GO_LINT_TIMEOUT=60s
+export CLAUDE_HOOKS_GO_MOD_TIDY=true
+
+# Python-specific settings
+export CLAUDE_HOOKS_PYTHON_BLACK_ENABLED=true
+export CLAUDE_HOOKS_PYTHON_RUFF_ENABLED=true
+export CLAUDE_HOOKS_PYTHON_FLAKE8_ENABLED=true
+
+# JavaScript-specific settings
+export CLAUDE_HOOKS_JS_ESLINT_ENABLED=true
+export CLAUDE_HOOKS_JS_PRETTIER_ENABLED=true
+
+# Rust-specific settings
+export CLAUDE_HOOKS_RUST_CLIPPY_ENABLED=true
+export CLAUDE_HOOKS_RUST_FMT_ENABLED=true
+
+# Shell-specific settings
+export CLAUDE_HOOKS_SHELL_SHELLCHECK_ENABLED=true
+
+# Luau-specific settings
+export CLAUDE_HOOKS_LUAU_LSP_BINARY=luau-lsp
+export CLAUDE_HOOKS_LUAU_BASE_LUAURC=.luaurc
+export CLAUDE_HOOKS_LUAU_STYLUA_ENABLED=true
+export CLAUDE_HOOKS_LUAU_LSP_ENABLED=true
+export CLAUDE_HOOKS_LUAU_MODIFIED_ONLY=false
+
+# Luau project-specific arrays (uncomment and configure as needed)
+# export CLAUDE_HOOKS_LUAU_DEFINITIONS=("path/to/roblox.d.luau" "path/to/testez.d.luau")
+# export CLAUDE_HOOKS_LUAU_SOURCEMAP="sourcemap.json"
+# export CLAUDE_HOOKS_LUAU_SETTINGS="luau-settings.json"
+# export CLAUDE_HOOKS_LUAU_EXTRA_ARGS="--additional-flags"
+
+# Project-specific customizations
+# Uncomment and modify as needed for your project
+
+# Example: Disable hooks for specific directories
+# if [[ "$PWD" == *"/generated"* ]]; then
+#     export CLAUDE_HOOKS_ENABLED=false
+# fi
+
+# Example: Different settings for different environments
+# if [[ "$NODE_ENV" == "development" ]]; then
+#     export CLAUDE_HOOKS_FAIL_FAST=false
+# fi
+
+# Example: Conditional enabling based on project type
+# if [[ -f "go.mod" ]]; then
+#     export CLAUDE_HOOKS_GO_ENABLED=true
+#     export CLAUDE_HOOKS_PYTHON_ENABLED=false
+# fi
+
+# Example: Custom ignore patterns (see .claude-hooks-ignore.example)
+# export CLAUDE_HOOKS_IGNORE_FILE=".claude-hooks-ignore"

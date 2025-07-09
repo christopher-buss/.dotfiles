@@ -117,10 +117,19 @@ Installs and configures mise, installs development tools from .tool-versions.
 ### Zsh Setup
 
 This configuration is optimized for Zsh with:
-- Starship prompt for beautiful terminal prompts
-- Plugin management system
-- Claude CLI integration
-- Development tools integration (fzf, direnv, etc.)
+- **Antidote plugin manager** for efficient plugin management
+- **Starship prompt** for beautiful terminal prompts
+- **Plugin ecosystem**: syntax highlighting, autosuggestions, smart navigation
+- **Claude CLI integration** with advanced shortcuts
+- **Development tools integration** (fzf, direnv, mise, etc.)
+
+#### Plugin Management with Antidote
+
+Plugins are managed via Antidote (installed via Homebrew):
+- Plugin list: `config/zsh/.zsh_plugins.txt`
+- Automatic installation and updates
+- Fast, git-based plugin loading
+- No vendor lock-in or framework overhead
 
 ## 🔒 Security
 
