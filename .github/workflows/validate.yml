@@ -97,11 +97,17 @@ jobs:
         
         # Create a modified install script for testing
         cp install.sh test-install.sh
+        cp lib/shell-helpers.sh test-lib-helpers.sh
         
         # Make the test script run in dry-run mode
         sed -i 's/ln -sf/echo "Would link"/g' test-install.sh
-        sed -i 's/mkdir -p/echo "Would create directory"/g' test-install.sh
+        sed -i 's/ln -sf/echo "Would link"/g' test-lib-helpers.sh
+        sed -i 's/mkdir -p/mkdir -p/g' test-install.sh
         sed -i 's/mv /echo "Would move "/g' test-install.sh
+        sed -i 's/mv /echo "Would move "/g' test-lib-helpers.sh
+        
+        # Update the install script to use the test helper
+        sed -i 's|lib/shell-helpers.sh|test-lib-helpers.sh|g' test-install.sh
         
         # Run the test installation
         chmod +x test-install.sh
