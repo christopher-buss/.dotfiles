@@ -7,7 +7,7 @@ Personal development environment configuration files for consistent setup across
 ### New Machine Setup
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/christopher-buss/.dotfiles/main/scripts/bootstrap.sh | bash -s -- https://github.com/christopher-buss/dotfiles.git
+curl -fsSL https://raw.githubusercontent.com/christopher-buss/.dotfiles/main/scripts/bootstrap.sh | bash -s -- https://github.com/christopher-buss/.dotfiles.git
 ```
 
 ### Manual Installation
