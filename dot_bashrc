@@ -1,0 +1,64 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+
+# Load shell helpers
+for script in ~/.config/shell/*.sh; do
+    [ -r "$script" ] && source "$script"
+done
+
+log_debug "Loading .bashrc"
+
+export XDG_CACHE_HOME=${HOME}/.cache
+export XDG_CONFIG_HOME=${HOME}/.config
+export XDG_DATA_HOME=${HOME}/.local/share
+export XDG_STATE_HOME=${HOME}/.local/state
+
+### ---- XDG workarounds ----------------------------------
+export HISTFILE="${XDG_STATE_HOME}"/bash/history
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME"/claude
+
+### ---- Windows Paths ------------------------------------
+export PATH=${PATH}:${HOME}/bin
+export PATH=${PATH}:${DEV_HOME}/bin
+export PATH=${PATH}:${HOME}/.local/bin
+
+# Set DEV_HOME for windows dev drive
+export DEV_HOME="d:"
+
+# Enable VS Code terminal suggestions
+export VSCODE_SUGGEST=1
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=10000
+HISTFILESIZE=10000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# when changing directory small typos can be ignored by bash
+# for example, cd /vr/lgo/apaache would find /var/log/apache
+shopt -s cdspell
+
+# windows can mangle some UTF-8 encoded text, causing unexpected characters to
+# be displayed in your terminal.
+/c/Windows/System32/chcp.com 65001 >/dev/null 2>&1
+
+# link to .zsh folder for configs
+export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
+
+export MSYS2_ARG_CONV_EXCL="/c/*;/home/*;~/*"
+
+if [ -t 1 ]; then
+    exec zsh
+fi

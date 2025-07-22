@@ -1,0 +1,21 @@
+# mise global configuration
+# See: https://mise.jdx.dev/configuration.html
+
+[settings]
+# Automatically install tools when entering a directory with .tool-versions
+auto_install = true
+
+# Show verbose output
+verbose = false
+
+# Use legacy version files (.nvmrc, .python-version, etc.)
+legacy_version_file = true
+
+# Tasks (mise can also run project tasks)
+[tasks]
+# Example task definitions can be added here
+
+[tools]
+node = { version = "lts", postinstall = "corepack enable" }
+"npm:@antfu/ni" = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"

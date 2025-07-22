@@ -1,0 +1,158 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3.1.0/config/document.json
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3.1.0/config/document.json
+parameters:
+  gitInstallOptions:
+    type: string
+    defaultValue: "/o:PathOption=CmdTools"
+    description: "Custom install options for Git"
+resources:
+  - type: Microsoft.DSC.Transitional/RunCommandOnSet
+    name: Git with Custom Options
+    directives:
+      description: "Install Git with custom options to add command line tools to PATH"
+      securityContext: elevated
+    properties:
+      executable: "winget"
+      arguments: 
+        - "install"
+        - "--id"
+        - "Git.Git"
+        - "-e"
+        - "--source"
+        - "winget"
+        - "--custom"
+        - "/o:PathOption=CmdTools"
+        - "--accept-package-agreements"
+        - "--accept-source-agreements"
+
+  - type: Microsoft.WinGet/Package
+    name: GitHub CLI
+    properties:
+      id: GitHub.cli
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: jq
+    properties:
+      id: jqlang.jq
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Docker Desktop
+    properties:
+      id: Docker.DockerDesktop
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: GnuPG
+    properties:
+      id: GnuPG.GnuPG
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Bitwarden CLI
+    properties:
+      id: Bitwarden.CLI
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Bitwarden
+    properties:
+      id: Bitwarden.Bitwarden
+      source: winget
+
+  # - type: Microsoft.WinGet/Package
+  #   name: OpenSSH
+  #   properties:
+  #     id: OpenSSH.OpenSSH
+  #     source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Windows Terminal
+    properties:
+      id: Microsoft.WindowsTerminal
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Visual Studio Code
+    properties:
+      id: Microsoft.VisualStudioCode
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: PowerToys
+    properties:
+      id: Microsoft.PowerToys
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: JetBrains Mono Nerd Font
+    properties:
+      id: DEVCOM.JetBrainsMonoNerdFont
+      source: winget
+ 
+  - type: Microsoft.WinGet/Package
+    name: Claude
+    properties:
+      id: Anthropic.Claude
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: GitKraken
+    properties:
+      id: Axosoft.GitKraken
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Linear
+    properties:
+      id: LinearOrbit.Linear
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Firefox
+    properties:
+      id: Mozilla.Firefox
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Paint NET
+    properties:
+      id: dotPDN.PaintDotNet
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Sysinternals Suite
+    properties:
+      id: Microsoft.Sysinternals.Suite
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Lightshot
+    properties:
+      id: Skillbrains.Lightshot
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: mise
+    properties:
+      id: jdx.mise
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Starship
+    properties:
+      id: Starship.Starship
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: Glow
+    properties:
+      id: charmbracelet.glow
+      source: winget
+
+  - type: Microsoft.WinGet/Package
+    name: fd
+    properties:
+      id: sharkdp.fd
+      source: winget

@@ -1,0 +1,42 @@
+# zmodload zsh/zprof
+
+# Load shell helpers
+for script in ~/.config/shell/*.sh; do
+	[ -r "$script" ] && source "$script"
+done
+
+### ---- XDG workarounds ----------------------------------
+export HISTFILE="$XDG_STATE_HOME"/zsh/history
+export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
+
+### ---- Auto Completions ---------------------------------
+fpath=($ZDOTDIR/site-functions $fpath)
+autoload -Uz compinit && compinit
+
+### ---- Windows UTF-8 encoding fix -----------------------------------
+# windows can mangle some UTF-8 encoded text, causing unexpected characters to
+# be displayed in your terminal.
+/c/Windows/System32/chcp.com 65001 >/dev/null 2>&1
+
+export MSYS2_ARG_CONV_EXCL="/c/*;/home/*;~/*"
+
+
+### ---- Source other configs -----------------------------------
+safe_source $ZDOTDIR/config/history.zsh
+safe_source $ZDOTDIR/config/inline-selection.zsh
+
+### ---- Mise activation -----------------------------------
+# Use shims approach instead of activate to avoid Windows path separator issues
+eval "$(mise activate zsh --shims)"
+
+### ---- Source plugins -----------------------------------
+safe_source $ZDOTDIR/plugins/plugins.zsh
+
+### ---- Load Starship -----------------------------------
+# https://github.com/starship/starship/issues/6333
+eval "$(starship init zsh | sed 's|/c/Program Files/starship/bin/starship.exe|starship|g')"
+
+### ---- Aliases ------------------------------------------
+safe_source $XDG_CONFIG_HOME/shell/aliases.sh
+
+# zprof

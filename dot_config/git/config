@@ -1,0 +1,219 @@
+[user]
+	name = christopher-buss
+	email = christopher.buss+github@protonmail.com
+	# signingkey set in ~/.gitconfig.local (not tracked)
+
+[init]
+	defaultBranch = main
+
+[core]
+	editor = code --wait
+	autocrlf = false
+	eol = lf
+	excludesfile = ~/.config/git/ignore
+	pager = delta
+	compression = 0
+	ignorecase = false
+	sparseCheckoutCone = true
+
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+
+[pull]
+	rebase = true
+
+[rebase]
+	autoStash = true
+	autoSquash = true
+	missingCommitsCheck = error
+	updateRefs = true
+
+[commit]
+	gpgsign = true
+	verbose = true
+	template = gitmessage
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[tag]
+	gpgSign = true
+
+[gpg]
+	program = C:\\Program Files (x86)\\gnupg\\bin\\gpg.exe
+
+[merge]
+	conflictstyle = zdiff3
+	tool = meld
+
+[diff]
+	algorithm = histogram
+	context = 10
+	submodule = log
+	colorMoved = true
+	compactionheuristic = true
+	mnemonicprefix = true
+	renames = copies
+
+[color]
+	ui = auto
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[alias]
+	# Basic shortcuts
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+	df = diff
+	dc = diff --cached
+	
+	# Logging
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	
+	# Show commits in a nice format
+	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+	
+	# Show files modified in last commit
+	dl = "!git ll -1"
+	dlc = diff --cached HEAD^
+	
+	# Find a file path in codebase
+	f = "!git ls-files | grep -i"
+	
+	# Search/grep on filename
+	grep = grep -Ii
+	gr = grep -Ii
+	
+	# Grep from root folder
+	gra = "!f() { A=$(pwd) && TOPLEVEL=$(git rev-parse --show-toplevel) && cd $TOPLEVEL && git grep --full-name -In $1 | xargs -I{} echo $TOPLEVEL/{} && cd $A; }; f"
+	
+	# Show last tag
+	lasttag = describe --tags --abbrev=0
+	lt = describe --tags --abbrev=0
+	
+	# Merge from one branch to another
+	# Usage: git mto develop
+	mto = "!f() { git checkout $1 && git merge @{-1} --no-edit; }; f"
+	
+	# Quick save and restore
+	save = !git add -A && git commit -m 'SAVEPOINT'
+	wip = !git add -u && git commit -m "WIP"
+	undo = reset HEAD~1 --mixed
+	amend = commit -a --amend
+	
+	# Stash operations
+	wipe = !git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard
+	
+	# Better diffs
+	staged = diff --staged
+	unstaged = diff
+	both = diff HEAD
+	
+	# Display all aliases
+	aliases = "!git config --get-regexp alias"
+	
+	# Safety & Workflow
+	pf = push --force-with-lease
+	car = commit --amend --no-edit
+	s = status --short --branch
+	
+	# WIP workflow
+	wip = "!git add -A && git commit --no-verify -m '--wip-- [skip ci]'"
+	unwip = "!git log -n 1 --pretty=format:'%s' | grep -q -- '--wip--' && git reset HEAD~1"
+	wips = "!git branch -v --no-abbrev | grep -- '--wip--'"
+	
+	# Hide/Show files
+	hide = update-index --skip-worktree
+	unhide = update-index --no-skip-worktree
+	hidden = "!git ls-files -v . | grep '^S' | cut -c3-"
+	unhide-all = "!git hidden | xargs -r git unhide"
+	
+	# Worktree management
+	wk = worktree
+	wkls = worktree list
+	wkadd = "!f() { git worktree add ../$1 $2 -b $1; }; f"
+	wkrm = "!git worktree remove ."
+	wkrmf = "!git worktree remove --force ."
+	
+	# Better log views
+	lg = log --oneline --decorate --graph
+	lga = log --oneline --decorate --graph --all
+	lgb = log --oneline --decorate --graph --branches
+	
+	# Utilities
+	authors = shortlog -n -s
+	branch-name = rev-parse --abbrev-ref HEAD
+
+[help]
+	autocorrect = 10
+
+[grep]
+	lineNumber = true
+	extendedRegexp = true
+	fallbackToNoIndex = true
+
+[blame]
+	ignoreRevsFile = .git-blame-ignore-revs
+	markIgnoredLines = true
+	markUnblamableLines = true
+
+[credential]
+	helper = cache --timeout=3600
+
+[rerere]
+	enabled = true
+	autoupdate = true
+
+[fetch]
+	prune = true
+	prunetags = true
+	fsckobjects = true
+	writeCommitGraph = true
+
+[transfer]
+	fsckobjects = true
+
+[receive]
+	fsckObjects = true
+
+[status]
+	submoduleSummary = true
+
+[submodule]
+	recurse = true
+
+[branch]
+	sort = -committerdate
+
+[interactive]
+	diffFilter = delta --color-only
+
+[url "https://github.com/"]
+	insteadOf = gh:
+
+# Include local git config if it exists
+[include]
+	path = ~/.config/git/config.local

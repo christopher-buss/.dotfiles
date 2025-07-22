@@ -1,0 +1,39 @@
+#!/usr/bin/env pwsh
+
+# Install packages via DSC 3.0
+# This script runs whenever the DSC configuration changes
+# Hash: {{ include ".chezmoidata/winget-packages.dsc.yaml" | sha256sum }}
+
+$ErrorActionPreference = "Stop"
+
+Write-Host "Installing packages via DSC 3.0..." -ForegroundColor Cyan
+
+# Path to the DSC configuration file in .chezmoidata
+$dscConfigPath = "{{ .chezmoi.sourceDir }}/.chezmoidata/winget-packages.dsc.yaml"
+
+if (Test-Path $dscConfigPath) {
+    Write-Host "Running DSC configuration from: $dscConfigPath" -ForegroundColor Yellow
+    
+    try {
+        # Test what changes are needed first
+        Write-Host "Checking current package state..." -ForegroundColor Yellow
+        $testResult = dsc config test -f $dscConfigPath
+        
+        if ($testResult -match "InDesiredState.*false") {
+            Write-Host "Installing/updating packages..." -ForegroundColor Yellow
+            dsc config set -f $dscConfigPath
+            Write-Host "✅ Package installation completed successfully!" -ForegroundColor Green
+        } else {
+            Write-Host "✅ All packages are already up to date!" -ForegroundColor Green
+        }
+    }
+    catch {
+        Write-Host "❌ Package installation failed: $_" -ForegroundColor Red
+        exit 1
+    }
+}
+else {
+    Write-Host "❌ DSC configuration file not found at: $dscConfigPath" -ForegroundColor Red
+    exit 1
+}
+

@@ -1,0 +1,22 @@
+# Rust development tools
+# Install with: cargo install <tool-name>
+
+# Essential CLI tools
+ripgrep
+fd-find
+bat
+exa
+tokei
+hyperfine
+
+# Development utilities
+cargo-watch
+cargo-expand
+cargo-edit
+cargo-audit
+
+# Optional tools (uncomment if needed)
+# starship
+# zoxide
+# bottom
+# gitui

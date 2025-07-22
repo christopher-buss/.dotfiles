@@ -1,0 +1,24 @@
+# ZSH Plugin list for Antidote
+# https://github.com/mattmc3/antidote
+
+# Essential plugins
+zsh-users/zsh-autosuggestions
+zsh-users/zsh-completions
+
+# Directory navigation
+agkozak/zsh-z
+
+# ZSH abbreviations
+olets/zsh-abbr kind:defer
+
+# Open git repo in browser
+paulirish/git-open
+
+# Up/Down to search history
+zsh-users/zsh-history-substring-search
+
+# Windows style selection
+# jirutka/zsh-shift-select
+
+# Fast syntax highlighting
+# zdharma-continuum/fast-syntax-highlighting
