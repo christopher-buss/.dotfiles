@@ -1,0 +1,94 @@
+{{- if eq .chezmoi.os "windows" -}}
+# GPG Setup Script for Windows
+# Automatically configures GPG for signing and sets up credential management
+
+Write-Host "Setting up GPG configuration..." -ForegroundColor Blue
+
+# Ensure GPG directories exist
+$gnupgHome = "$env:USERPROFILE\.local\share\gnupg"
+if (-not (Test-Path $gnupgHome)) {
+    New-Item -Path $gnupgHome -ItemType Directory -Force | Out-Null
+    Write-Host "Created GPG home directory: $gnupgHome" -ForegroundColor Green
+}
+
+# Set proper permissions on GPG directory (Windows equivalent of chmod 700)
+try {
+    $acl = Get-Acl $gnupgHome
+    $acl.SetAccessRuleProtection($true, $false) # Disable inheritance
+    $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+        $env:USERNAME, "FullControl", "ContainerInherit,ObjectInherit", "None", "Allow"
+    )
+    $acl.SetAccessRule($accessRule)
+    Set-Acl -Path $gnupgHome -AclObject $acl
+    Write-Host "Set secure permissions on GPG directory" -ForegroundColor Green
+}
+catch {
+    Write-Warning "Could not set secure permissions on GPG directory: $_"
+}
+
+# Check if GPG is available
+$gpgPath = Get-Command gpg -ErrorAction SilentlyContinue
+if (-not $gpgPath) {
+    Write-Host "GPG not found in PATH. Checking standard installation locations..." -ForegroundColor Yellow
+    
+    $standardPaths = @(
+        "C:\Program Files (x86)\GnuPG\bin\gpg.exe",
+        "C:\Program Files\GnuPG\bin\gpg.exe"
+    )
+    
+    $foundGpg = $false
+    foreach ($path in $standardPaths) {
+        if (Test-Path $path) {
+            Write-Host "Found GPG at: $path" -ForegroundColor Green
+            $foundGpg = $true
+            break
+        }
+    }
+    
+    if (-not $foundGpg) {
+        Write-Host "GPG not found. Please install GPG4Win from https://www.gpg4win.org/" -ForegroundColor Red
+        Write-Host "Or install via winget: winget install GnuPG.GnuPG" -ForegroundColor Yellow
+        exit 1
+    }
+}
+
+# Reload gpg-agent with new configuration
+try {
+    & gpgconf --reload gpg-agent 2>$null
+    Write-Host "Reloaded gpg-agent with new configuration" -ForegroundColor Green
+}
+catch {
+    Write-Host "Starting gpg-agent..." -ForegroundColor Yellow
+    & gpgconf --launch gpg-agent 2>$null
+}
+
+# Check if signing key is configured in git
+$signingKey = & git config --get user.signingkey 2>$null
+if ($signingKey) {
+    Write-Host "Git signing key configured: $signingKey" -ForegroundColor Green
+    
+    # Test if the key exists
+    $keyExists = & gpg --list-secret-keys $signingKey 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Host "GPG signing key is available" -ForegroundColor Green
+        
+        # Provide instructions for credential setup
+        Write-Host "`nTo enable automatic GPG signing:" -ForegroundColor Cyan
+        Write-Host "1. Store your GPG passphrase in Windows Credential Manager:" -ForegroundColor White
+        Write-Host "   cmdkey /generic:GPG_Passphrase /user:gpg /pass:YOUR_PASSPHRASE" -ForegroundColor Gray
+        Write-Host "2. Run the preset script to cache your passphrase:" -ForegroundColor White
+        Write-Host "   ~/.local/bin/gpg-preset-passphrase.ps1" -ForegroundColor Gray
+        Write-Host "3. Your commits will be automatically signed for 24 hours" -ForegroundColor White
+    }
+    else {
+        Write-Host "Warning: Configured signing key not found in GPG keyring" -ForegroundColor Yellow
+        Write-Host "You may need to import your GPG key or generate a new one" -ForegroundColor Yellow
+    }
+}
+else {
+    Write-Host "No GPG signing key configured in git" -ForegroundColor Yellow
+    Write-Host "Configure with: git config --global user.signingkey YOUR_KEY_ID" -ForegroundColor Gray
+}
+
+Write-Host "GPG setup completed!" -ForegroundColor Green
+{{- end -}}

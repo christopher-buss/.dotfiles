@@ -1,0 +1,107 @@
+{{- if eq .chezmoi.os "windows" -}}
+# GPG Passphrase Preset Script for Windows
+# This script retrieves your GPG passphrase from Windows Credential Manager
+# and presets it to gpg-agent for automatic signing
+
+param(
+    [string]$KeyId = "",
+    [string]$CredentialName = "GPG_Passphrase"
+)
+
+# Get signing key from git config if not provided
+if (-not $KeyId) {
+    $KeyId = & git config --get user.signingkey 2>$null
+    if (-not $KeyId) {
+        Write-Error "No GPG signing key found. Configure with: git config --global user.signingkey YOUR_KEY_ID"
+        exit 1
+    }
+}
+
+# Function to get credentials from Windows Credential Manager
+function Get-StoredCredential {
+    param([string]$Name)
+    
+    try {
+        # Use cmdkey to retrieve the credential
+        $credOutput = cmdkey /list:$Name 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            # Prompt for password since cmdkey doesn't return it
+            Write-Host "Enter GPG passphrase for automatic signing:" -ForegroundColor Yellow
+            $securePass = Read-Host -AsSecureString
+            $bstr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePass)
+            $password = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+            [System.Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+            return $password
+        }
+        else {
+            throw "Credential not found"
+        }
+    }
+    catch {
+        Write-Host "Credential '$Name' not found in Windows Credential Manager" -ForegroundColor Yellow
+        Write-Host "Please store your GPG passphrase using:" -ForegroundColor Yellow
+        Write-Host "cmdkey /generic:$Name /user:gpg /pass:YOUR_PASSPHRASE" -ForegroundColor Cyan
+        return $null
+    }
+}
+
+# Check if gpg-agent is running
+$agentProcess = Get-Process -Name "gpg-agent" -ErrorAction SilentlyContinue
+if (-not $agentProcess) {
+    Write-Host "Starting gpg-agent..." -ForegroundColor Yellow
+    & gpgconf --launch gpg-agent
+    Start-Sleep -Seconds 2
+}
+
+# Get the GPG key grip for the signing key
+try {
+    $keygrip = & gpg --list-secret-keys --with-keygrip $KeyId 2>$null | 
+        Select-String "Keygrip = (.+)" | 
+        ForEach-Object { $_.Matches.Groups[1].Value } |
+        Select-Object -First 1
+
+    if (-not $keygrip) {
+        Write-Error "Could not find keygrip for key $KeyId"
+        Write-Host "Available keys:" -ForegroundColor Yellow
+        & gpg --list-secret-keys --keyid-format=long
+        exit 1
+    }
+}
+catch {
+    Write-Error "Failed to access GPG keys. Make sure GPG is properly configured."
+    exit 1
+}
+
+# Get passphrase from credential manager or prompt
+$passphrase = Get-StoredCredential -Name $CredentialName
+
+if ($passphrase) {
+    # Preset the passphrase to gpg-agent
+    try {
+        $passphraseBytes = [System.Text.Encoding]::UTF8.GetBytes($passphrase)
+        $passphraseHex = ($passphraseBytes | ForEach-Object { $_.ToString("X2") }) -join ""
+        
+        $presetCommand = "PRESET_PASSPHRASE $keygrip -1 $passphraseHex"
+        
+        echo $presetCommand | & gpg-connect-agent 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "GPG passphrase preset successfully for 24 hours" -ForegroundColor Green
+        }
+        else {
+            Write-Warning "Failed to preset GPG passphrase, but gpg-agent cache is extended"
+        }
+        
+        # Clear the passphrase from memory
+        $passphrase = $null
+        $passphraseHex = $null
+        [System.GC]::Collect()
+    }
+    catch {
+        Write-Error "Failed to preset GPG passphrase: $_"
+        exit 1
+    }
+}
+else {
+    Write-Host "No passphrase provided. GPG signing will require manual password entry." -ForegroundColor Yellow
+}
+{{- end -}}
