@@ -1,12 +1,11 @@
+#!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
 # Load shell helpers
-for script in ~/.config/shell/*.sh; do
-    [ -r "$script" ] && source "$script"
-done
+source ~/.config/shell/shell-helpers.sh
 
 log_debug "Loading .bashrc"
 

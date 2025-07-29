@@ -18,16 +18,13 @@ autoload -Uz compinit && compinit
 # be displayed in your terminal.
 /c/Windows/System32/chcp.com 65001 >/dev/null 2>&1
 
-export MSYS2_ARG_CONV_EXCL="/c/*;/home/*;~/*"
-
-
 ### ---- Source other configs -----------------------------------
 safe_source $ZDOTDIR/config/history.zsh
 safe_source $ZDOTDIR/config/inline-selection.zsh
 
 ### ---- Mise activation -----------------------------------
-# Use shims approach instead of activate to avoid Windows path separator issues
-eval "$(mise activate zsh --shims)"
+# Clean mise setup with path separator fix
+export PATH="/c/Users/Christopher/.local/share/mise/shims:$PATH"
 
 ### ---- Source plugins -----------------------------------
 safe_source $ZDOTDIR/plugins/plugins.zsh
@@ -38,5 +35,8 @@ eval "$(starship init zsh | sed 's|/c/Program Files/starship/bin/starship.exe|st
 
 ### ---- Aliases ------------------------------------------
 safe_source $XDG_CONFIG_HOME/shell/aliases.sh
+
+### ---- VS Code Shell Integration -----------------------------------
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(cygpath "$(code --locate-shell-integration-path zsh)")"
 
 # zprof

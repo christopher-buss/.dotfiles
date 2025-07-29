@@ -111,6 +111,22 @@ alias cls='clear'
 alias zshconfig='${EDITOR:-code} $ZDOTDIR/.zshrc'
 alias bashconfig='${EDITOR:-code} ~/.bashrc'
 
+# Corepack
+alias yarn="corepack yarn"
+alias npm="corepack npm"
+alias npx="corepack npx"
+
+# Pnpm cross-drive support
+unset pnpm 2>/dev/null || true
+unalias pnpm 2>/dev/null || true
+pnpm() {
+      if [[ "$PWD" == /d/* ]] || [[ "$PWD" == D:* ]]; then
+          PNPM_HOME="D:/packages/pnpm" command corepack pnpm "$@"
+      else
+          command corepack pnpm "$@"
+      fi
+  }
+
 # Load local aliases if they exist
 if [ -f ~/.aliases.local ]; then
     source ~/.aliases.local

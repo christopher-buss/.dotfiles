@@ -1,0 +1,9 @@
+{
+	"name": "dotfiles",
+	"private": true,
+	"devDependencies": {
+		"@isentinel/eslint-config": "^1.2.6",
+		"eslint": "9.25.1"
+	},
+	"packageManager": "pnpm@10.13.1"
+}

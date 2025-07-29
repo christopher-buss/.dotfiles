@@ -1,1 +1,6 @@
 CLAUDE.md
+.vscode
+package.json
+node_modules
+pnpm-workspace.yaml
+pnpm-lock.yaml

@@ -1,10 +1,8 @@
 {
-  "mcpServers": {
-    "project-git": {
-      "_description": "Git integration for this project repository",
-      "command": "npx",
-      "args": ["@modelcontextprotocol/server-git", "--repository", "."],
-      "_capabilities": ["read commits", "branch info", "file history", "diff viewing"]
-    }
-  }
+	"mcpServers": {
+		"context7": {
+			"type": "http",
+			"url": "https://mcp.context7.com/mcp"
+		}
+	}
 }

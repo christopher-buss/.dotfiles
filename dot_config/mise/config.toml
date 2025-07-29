@@ -4,6 +4,7 @@
 [settings]
 # Automatically install tools when entering a directory with .tool-versions
 auto_install = true
+experimental = true
 
 # Show verbose output
 verbose = false
@@ -19,3 +20,4 @@ legacy_version_file = true
 node = { version = "lts", postinstall = "corepack enable" }
 "npm:@antfu/ni" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
+"npm:@vscode/vsce" = "latest"
