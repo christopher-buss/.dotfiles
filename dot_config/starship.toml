@@ -6,9 +6,7 @@ palette = "catppuccin_macchiato"
 
 # Inserts a blank line between shell prompts
 add_newline = false
-
 command_timeout = 1000
-
 format = """
 $character\
 $env_var\
@@ -35,17 +33,18 @@ $memory_usage\
 $docker_context\
 [](#1C3A5E)$time[ ](#1C3A5E)$cmd_duration
 [└─>](bold green) """
-
 continuation_prompt = '▶▶ '
 
 # Replace the '❯' symbol in the prompt with '➜'
-[character] # The name of the module we are configuring is 'character'
+# The name of the module we are configuring is 'character'
+[character]
 success_symbol = "🚀 "
 error_symbol = "🔥 "
 
 [time]
 disabled = false
-time_format = "%r"                                      # Hour:Minute Format
+# Hour:Minute Format
+time_format = "%r"
 style = "bg:#1d2230"
 format = '[[ 󱑍 $time ](bg:#1C3A5E fg:#8DFBD2)]($style)'
 
@@ -135,7 +134,11 @@ deleted = ' '
 # ---
 
 [lua]
-detect_extensions = ["lua", "luau"] # Support luau language
+detect_extensions = [
+  "lua",
+  "luau"
+]
+# Support luau language
 symbol = " "
 
 [aws]
@@ -228,6 +231,45 @@ symbol = " "
 [ocaml]
 symbol = " "
 
+[package]
+symbol = "󰏗 "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[pijul_channel]
+symbol = " "
+
+[pixi]
+symbol = "󰏗 "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "󰟔 "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = "󱘗 "
+
+[scala]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[gradle]
+symbol = " "
+
 [os.symbols]
 Alpaquita = " "
 Alpine = " "
@@ -274,42 +316,3 @@ Ubuntu = " "
 Unknown = " "
 Void = " "
 Windows = "󰍲 "
-
-[package]
-symbol = "󰏗 "
-
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[pijul_channel]
-symbol = " "
-
-[pixi]
-symbol = "󰏗 "
-
-[python]
-symbol = " "
-
-[rlang]
-symbol = "󰟔 "
-
-[ruby]
-symbol = " "
-
-[rust]
-symbol = "󱘗 "
-
-[scala]
-symbol = " "
-
-[swift]
-symbol = " "
-
-[zig]
-symbol = " "
-
-[gradle]
-symbol = " "

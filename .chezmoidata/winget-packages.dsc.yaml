@@ -3,27 +3,27 @@ $schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3.1.0/co
 parameters:
   gitInstallOptions:
     type: string
-    defaultValue: "/o:PathOption=CmdTools"
-    description: "Custom install options for Git"
+    defaultValue: '/o:PathOption=CmdTools'
+    description: Custom install options for Git
 resources:
   - type: Microsoft.DSC.Transitional/RunCommandOnSet
     name: Git with Custom Options
     directives:
-      description: "Install Git with custom options to add command line tools to PATH"
+      description: Install Git with custom options to add command line tools to PATH
       securityContext: elevated
     properties:
-      executable: "winget"
-      arguments: 
-        - "install"
-        - "--id"
-        - "Git.Git"
-        - "-e"
-        - "--source"
-        - "winget"
-        - "--custom"
-        - "/o:PathOption=CmdTools"
-        - "--accept-package-agreements"
-        - "--accept-source-agreements"
+      executable: winget
+      arguments:
+        - install
+        - --id
+        - Git.Git
+        - -e
+        - --source
+        - winget
+        - --custom
+        - '/o:PathOption=CmdTools'
+        - --accept-package-agreements
+        - --accept-source-agreements
 
   - type: Microsoft.WinGet/Package
     name: GitHub CLI
@@ -90,7 +90,7 @@ resources:
     properties:
       id: DEVCOM.JetBrainsMonoNerdFont
       source: winget
- 
+
   - type: Microsoft.WinGet/Package
     name: Claude
     properties:
