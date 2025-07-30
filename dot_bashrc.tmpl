@@ -9,17 +9,14 @@ source ~/.config/shell/shell-helpers.sh
 
 log_debug "Loading .bashrc"
 
-export XDG_CACHE_HOME=${HOME}/.cache
-export XDG_CONFIG_HOME=${HOME}/.config
-export XDG_DATA_HOME=${HOME}/.local/share
-export XDG_STATE_HOME=${HOME}/.local/state
-
-### ---- XDG workarounds ----------------------------------
-export HISTFILE="${XDG_STATE_HOME}"/bash/history
-export GNUPGHOME="$XDG_DATA_HOME"/gnupg
-export CLAUDE_CONFIG_DIR="$XDG_CONFIG_HOME"/claude
+# Convert Windows paths to Unix paths using cygpath
+{{- range $key, $value := .env_vars }}
+export {{ $key }}="$(cygpath -u "{{ $.chezmoi.homeDir }}/{{ $value }}")"
+{{- end }}
 
 ### ---- Windows Paths ------------------------------------
+# Prioritize Windows GPG4Win over Git Bash GPG by putting it first in PATH
+export PATH="/c/PROGRA~2/GnuPG/bin:${PATH}"
 export PATH=${PATH}:${HOME}/bin
 export PATH=${PATH}:${DEV_HOME}/bin
 export PATH=${PATH}:${HOME}/.local/bin
